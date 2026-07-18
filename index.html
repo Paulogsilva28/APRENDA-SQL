@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aprenda SQL Praticando — Tutorial Interativo em Português</title>
+  
+  <!-- Favicon para o Navegador -->
+  <link rel="shortcut icon" href="favicon.jpg" type="image/jpeg">
+  
+  <!-- FontAwesome para ícones premium -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CodeMirror CSS (Editor de Código) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/dracula.min.css">
+  
+  <!-- Estilos customizados da aplicação -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">SQL</div>
+      <h1>Aprenda SQL <span>Praticando</span></h1>
+    </div>
+    <div class="header-actions">
+      <button id="btn-toggle-sound" class="btn-toggle-sound" title="Ativar/Desativar som do tutorial">
+        <i class="fas fa-volume-up"></i>
+      </button>
+      <button id="btn-reset-all" class="btn-reset-all" title="Reinicia todo o progresso do tutorial">
+        <i class="fas fa-redo-alt"></i> Reiniciar Progresso
+      </button>
+    </div>
+  </header>
+
+  <!-- Layout Principal -->
+  <main class="main-container">
+    
+    <!-- Menu Lateral (Lista de Lições) -->
+    <aside>
+      <div class="sidebar-header">
+        <h3><i class="fas fa-list-ol"></i> Índice de Lições</h3>
+      </div>
+      <div class="lessons-list-container">
+        <ul id="sidebar-lessons" class="lessons-list">
+          <!-- Gerado dinamicamente no app.js -->
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Conteúdo da Lição e Editor -->
+    <section class="content-wrapper">
+      
+      <!-- Lado Esquerdo: Conteúdo e Explicação da Lição -->
+      <div class="split-left">
+        <div class="lesson-card">
+          <h2 id="lesson-title">Lição 1: SELECT *</h2>
+          <div id="lesson-prompt" class="lesson-prompt">
+            <!-- Gerado dinamicamente no app.js -->
+          </div>
+        </div>
+        
+        <!-- Navegação de Lições inferior -->
+        <div class="pagination-container">
+          <a id="btn-prev" class="pagination-btn" href="#">
+            <i class="fas fa-chevron-left"></i> Anterior
+          </a>
+          <a id="btn-next" class="pagination-btn" href="#">
+            Próxima <i class="fas fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Lado Direito: Editor de Código e Resultados -->
+      <div class="split-right">
+        
+        <!-- Editor de Código -->
+        <div class="editor-container">
+          <div class="editor-header">
+            <div class="editor-title">
+              <i class="fas fa-code"></i> Editor de Consulta SQL
+            </div>
+            <div class="editor-actions">
+              <button id="btn-reset" class="btn btn-secondary" title="Restaura a consulta inicial da lição">
+                <i class="fas fa-undo"></i> Restaurar
+              </button>
+              <button id="btn-run" class="btn btn-primary" title="Executa a consulta (Atalho: Ctrl+Enter)">
+                <i class="fas fa-play"></i> Executar Consulta
+              </button>
+            </div>
+          </div>
+          
+          <textarea id="sql-input" placeholder="Escreva sua consulta SQL aqui..."></textarea>
+          
+          <div class="editor-tip">
+            <i class="far fa-lightbulb"></i> Dica: Pressione <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para executar a consulta mais rapidamente.
+          </div>
+        </div>
+
+        <!-- Mensagens de Feedback de Acerto/Erro -->
+        <div class="feedback-container">
+          <div id="feedback-correct" class="feedback-box feedback-correct">
+            <!-- Sucesso -->
+          </div>
+          <div id="feedback-wrong" class="feedback-box feedback-wrong">
+            <!-- Erro -->
+          </div>
+        </div>
+
+        <!-- Abas e Tabela de Resultados -->
+        <div class="results-pane">
+          <div class="results-tabs">
+            <button class="tab-btn active" data-target="tab-db">
+              <i class="fas fa-database"></i> Tabelas do Banco
+            </button>
+            <button class="tab-btn" data-target="tab-user">
+              <i class="fas fa-table"></i> Seu Resultado
+            </button>
+            <button class="tab-btn" data-target="tab-expected">
+              <i class="fas fa-clipboard-check"></i> Resultado Esperado
+            </button>
+          </div>
+          
+          <div class="results-content">
+            <!-- Tab: Tabelas do Banco de Dados -->
+            <div id="tab-db" class="tab-content active">
+              <div id="db-tables-view">
+                <!-- Tabelas com dados disponíveis de exemplo -->
+              </div>
+            </div>
+            
+            <!-- Tab: Seu Resultado -->
+            <div id="tab-user" class="tab-content">
+              <div id="user-result-view">
+                <div class="no-results">Execute uma consulta para visualizar os resultados.</div>
+              </div>
+            </div>
+            
+            <!-- Tab: Resultado Esperado -->
+            <div id="tab-expected" class="tab-content">
+              <div id="expected-result-view">
+                <div class="no-results">Execute uma consulta para comparar com os resultados esperados.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- CDNs das dependências de JS -->
+  
+  <!-- SQL.js WebAssembly Engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+  
+  <!-- CodeMirror Editor Core e Modos -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/sql/sql.min.js"></script>
+  
+  <!-- Canvas Confetti para celebrações -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Lógica da Aplicação -->
+  <script src="lessons.js"></script>
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
